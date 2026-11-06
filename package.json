@@ -1,0 +1,68 @@
+{
+  "name": "dsh-plugin-smith",
+  "version": "0.1.1",
+  "description": "Demand-driven plugin forge for DSH: scout candidates, audit them, judge full-blood vs cut-down builds, close the gaps, verify with tests, and install with a reviewable evidence trail.",
+  "license": "MIT",
+  "author": "YansongG-HKU",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YansongG-HKU/dsh-plugin-smith.git"
+  },
+  "homepage": "https://github.com/YansongG-HKU/dsh-plugin-smith#readme",
+  "bugs": {
+    "url": "https://github.com/YansongG-HKU/dsh-plugin-smith/issues"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "plugin-manager",
+    "plugin-audit",
+    "supply-chain",
+    "capability-gap",
+    "installation-ledger"
+  ],
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "lib",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "README.en.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\""
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar"
+      ]
+    },
+    "manifestVersion": 1
+  },
+  "engines": {
+    "node": ">=22",
+    "dsh": ">=0.2.2-rc.1"
+  }
+}

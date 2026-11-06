@@ -1,0 +1,7 @@
+{
+  "name": "fixture-bounds",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/example/fixture-bounds.git" }
+}

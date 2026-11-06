@@ -1,0 +1,7 @@
+{
+  "name": "fixture-broken",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dsh": { "bundle": { "patch": "./missing.patch.yml" } }
+}

