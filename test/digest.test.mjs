@@ -8,7 +8,7 @@ import { digestDirectory } from '../lib/digest.js'
 import { integrityCheck } from '../lib/install.js'
 
 async function fixture() {
-  const dir = await mkdtemp(join(tmpdir(), 'smith-digest-'))
+  const dir = await mkdtemp(join(tmpdir(), 'keeper-digest-'))
   await mkdir(join(dir, 'lib'), { recursive: true })
   await writeFile(join(dir, 'package.json'), JSON.stringify({ name: 'x', version: '1.0.0' }), 'utf8')
   await writeFile(join(dir, 'lib', 'index.js'), 'export const x = 1\n', 'utf8')
@@ -41,7 +41,7 @@ test('digest skips node_modules and reports truncation', async () => {
 })
 
 test('integrityCheck passes when installed content matches the audited digest', async () => {
-  const profile = await mkdtemp(join(tmpdir(), 'smith-profile-'))
+  const profile = await mkdtemp(join(tmpdir(), 'keeper-profile-'))
   const installed = join(profile, 'node_modules', 'fixture-pkg')
   await mkdir(installed, { recursive: true })
   await writeFile(join(installed, 'package.json'), JSON.stringify({ name: 'fixture-pkg', version: '1.0.0' }), 'utf8')
@@ -59,7 +59,7 @@ test('integrityCheck passes when installed content matches the audited digest', 
 })
 
 test('integrityCheck fails when the installed bytes differ', async () => {
-  const profile = await mkdtemp(join(tmpdir(), 'smith-profile-'))
+  const profile = await mkdtemp(join(tmpdir(), 'keeper-profile-'))
   const installed = join(profile, 'node_modules', 'fixture-pkg')
   await mkdir(installed, { recursive: true })
   await writeFile(join(installed, 'index.js'), 'export const ok = true\n', 'utf8')
@@ -92,7 +92,7 @@ test('integrityCheck skips without evidence instead of passing', async () => {
   const noPackageDir = await integrityCheck({
     audit: { digest: 'a'.repeat(64) },
     packageName: 'not-installed',
-    profileDir: await mkdtemp(join(tmpdir(), 'smith-profile-')),
+    profileDir: await mkdtemp(join(tmpdir(), 'keeper-profile-')),
   })
   assert.equal(noPackageDir.status, 'skip')
 })

@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { createSmithService, createStore } from '../lib/service.js'
+import { createKeeperService, createStore } from '../lib/service.js'
 import { installGate } from '../lib/pipeline.js'
 import { normalizeDecision, normalizeRecord, summarizeRecord } from '../lib/records.js'
 
@@ -13,9 +13,9 @@ const here = dirname(fileURLToPath(import.meta.url))
 const bundleDir = join(here, 'fixtures', 'bundle-good')
 
 async function makeService() {
-  const dataDir = await mkdtemp(join(tmpdir(), 'smith-amend-'))
+  const dataDir = await mkdtemp(join(tmpdir(), 'keeper-amend-'))
   const ctx = { agents: { currentInitiator: () => undefined }, workingDirectory: { get: () => dataDir } }
-  return { service: createSmithService({ ctx, store: createStore({ dir: dataDir }) }), dataDir }
+  return { service: createKeeperService({ ctx, store: createStore({ dir: dataDir }) }), dataDir }
 }
 
 /** Build a record with a safe candidate, one gap, and a complete-then-install decision. */

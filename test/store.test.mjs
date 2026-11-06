@@ -4,12 +4,12 @@ import { mkdtemp, readFile, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
-import { SmithStore } from '../lib/store.js'
+import { KeeperStore } from '../lib/store.js'
 import { emptyRecord } from '../lib/records.js'
 
 async function tempStore() {
-  const dir = await mkdtemp(join(tmpdir(), 'smith-store-'))
-  const store = new SmithStore({ dir })
+  const dir = await mkdtemp(join(tmpdir(), 'keeper-store-'))
+  const store = new KeeperStore({ dir })
   await store.init()
   return { dir, store }
 }
@@ -20,7 +20,7 @@ test('records survive a reload', async () => {
   record.id = 'sc-persist'
   await store.saveRecord(record)
 
-  const reopened = new SmithStore({ dir })
+  const reopened = new KeeperStore({ dir })
   await reopened.init()
   const loaded = reopened.getRecord('sc-persist')
   assert.ok(loaded)
@@ -40,9 +40,9 @@ test('history is append-only and newest first', async () => {
 })
 
 test('a corrupt ledger does not throw and starts empty', async () => {
-  const dir = await mkdtemp(join(tmpdir(), 'smith-store-'))
+  const dir = await mkdtemp(join(tmpdir(), 'keeper-store-'))
   await writeFile(join(dir, 'records.json'), '{ not json', 'utf8')
-  const store = new SmithStore({ dir })
+  const store = new KeeperStore({ dir })
   await store.init()
   assert.deepEqual(store.listRecords(), [])
 })

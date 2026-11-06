@@ -349,7 +349,7 @@ const history = [
   },
 ]
 
-const dir = join(target, 'plugin-smith')
+const dir = join(target, 'plugin-keeper')
 await mkdir(dir, { recursive: true })
 await writeFile(join(dir, 'records.json'), `${JSON.stringify({ version: 1, records: [recordA, recordB] }, null, 2)}\n`, 'utf8')
 await writeFile(join(dir, 'history.json'), `${JSON.stringify({ version: 1, entries: history }, null, 2)}\n`, 'utf8')

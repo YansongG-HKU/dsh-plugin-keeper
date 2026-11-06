@@ -12,7 +12,7 @@ import { join } from 'node:path'
  * profile will execute.
  */
 async function mount() {
-  const dataDir = await mkdtemp(join(tmpdir(), 'smith-panel-'))
+  const dataDir = await mkdtemp(join(tmpdir(), 'keeper-panel-'))
   const tools = []
   const routes = []
   const ctx = {
@@ -34,17 +34,17 @@ async function mount() {
   apply(ctx, { dataDir })
   const tool = tools.find((entry) => entry.name === 'plugin_scout')
   assert.ok(tool, 'plugin_scout must be registered')
-  const route = routes.find((entry) => entry.path === '/plugin-smith')
+  const route = routes.find((entry) => entry.path === '/plugin-keeper')
   assert.ok(route, 'panel route must be registered')
   return { tool, route, ctx, dataDir }
 }
 
-function fakeRequest({ method = 'GET', url = '/plugin-smith/api/state', headers = {}, body = null } = {}) {
+function fakeRequest({ method = 'GET', url = '/plugin-keeper/api/state', headers = {}, body = null } = {}) {
   const chunks = body === null ? [] : [Buffer.from(JSON.stringify(body), 'utf8')]
   const req = Readable.from(chunks)
   req.method = method
   req.url = url
-  req.headers = { host: '127.0.0.1:1234', 'x-plugin-smith': '1', ...headers }
+  req.headers = { host: '127.0.0.1:1234', 'x-plugin-keeper': '1', ...headers }
   return req
 }
 
@@ -92,7 +92,7 @@ async function waitFor(predicate, timeoutMs = 3000) {
 
 test('panel rejects a request without the plugin header', async () => {
   const { route } = await mount()
-  const response = await call(route, fakeRequest({ headers: { 'x-plugin-smith': '0' } }))
+  const response = await call(route, fakeRequest({ headers: { 'x-plugin-keeper': '0' } }))
   assert.equal(response.status, 403)
   assert.equal(response.payload.ok, false)
 })
@@ -110,7 +110,7 @@ test('tool and panel share one record', async () => {
   assert.equal(state.payload.stats.total, 1)
   assert.equal(state.payload.records[0].id, id)
 
-  const detail = await call(route, fakeRequest({ url: `/plugin-smith/api/record?id=${encodeURIComponent(id)}` }))
+  const detail = await call(route, fakeRequest({ url: `/plugin-keeper/api/record?id=${encodeURIComponent(id)}` }))
   assert.equal(detail.payload.ok, true)
   assert.equal(detail.payload.record.id, id)
   assert.match(detail.payload.brief, /plugin_scout/)
@@ -119,7 +119,7 @@ test('tool and panel share one record', async () => {
     route,
     fakeRequest({
       method: 'POST',
-      url: '/plugin-smith/api/action',
+      url: '/plugin-keeper/api/action',
       body: { action: 'claim-session', id, kind: 'work', sessionId: 'sess-panel-1' },
     }),
   )
@@ -132,7 +132,7 @@ test('panel intake validates the requirement text', async () => {
   const { route } = await mount()
   const response = await call(
     route,
-    fakeRequest({ method: 'POST', url: '/plugin-smith/api/action', body: { action: 'intake', text: '短' } }),
+    fakeRequest({ method: 'POST', url: '/plugin-keeper/api/action', body: { action: 'intake', text: '短' } }),
   )
   assert.equal(response.payload.ok, false)
   assert.match(response.payload.error, /4 个字/)
@@ -144,7 +144,7 @@ test('panel install is refused while there is no decision', async () => {
   const id = created.record.id
   const response = await call(
     route,
-    fakeRequest({ method: 'POST', url: '/plugin-smith/api/action', body: { action: 'install', id } }),
+    fakeRequest({ method: 'POST', url: '/plugin-keeper/api/action', body: { action: 'install', id } }),
   )
   assert.equal(response.payload.ok, false)
 })
@@ -153,12 +153,12 @@ test('unknown actions and routes answer JSON, never a crash', async () => {
   const { route } = await mount()
   const unknownAction = await call(
     route,
-    fakeRequest({ method: 'POST', url: '/plugin-smith/api/action', body: { action: 'rm -rf /' } }),
+    fakeRequest({ method: 'POST', url: '/plugin-keeper/api/action', body: { action: 'rm -rf /' } }),
   )
   assert.equal(unknownAction.status, 404)
   assert.equal(unknownAction.payload.ok, false)
 
-  const unknownRoute = await call(route, fakeRequest({ url: '/plugin-smith/api/nope' }))
+  const unknownRoute = await call(route, fakeRequest({ url: '/plugin-keeper/api/nope' }))
   assert.equal(unknownRoute.status, 404)
 })
 
@@ -166,8 +166,8 @@ test('a malformed JSON body is a clean error, not a 500 stack', async () => {
   const { route } = await mount()
   const req = Readable.from([Buffer.from('{oops', 'utf8')])
   req.method = 'POST'
-  req.url = '/plugin-smith/api/action'
-  req.headers = { host: '127.0.0.1:1234', 'x-plugin-smith': '1' }
+  req.url = '/plugin-keeper/api/action'
+  req.headers = { host: '127.0.0.1:1234', 'x-plugin-keeper': '1' }
   const { res, done } = fakeResponse()
   route.handler(req, res)
   await waitFor(() => res.writableEnded)
@@ -185,7 +185,7 @@ test('panel amend appends a requirement revision; gap session returns the regap 
     route,
     fakeRequest({
       method: 'POST',
-      url: '/plugin-smith/api/action',
+      url: '/plugin-keeper/api/action',
       body: { action: 'amend', id, text: '追加：还要支持按时间范围筛选。', note: '面板增补' },
     }),
   )
@@ -197,7 +197,7 @@ test('panel amend appends a requirement revision; gap session returns the regap 
 
   const short = await call(
     route,
-    fakeRequest({ method: 'POST', url: '/plugin-smith/api/action', body: { action: 'amend', id, text: ' ' } }),
+    fakeRequest({ method: 'POST', url: '/plugin-keeper/api/action', body: { action: 'amend', id, text: ' ' } }),
   )
   assert.equal(short.payload.ok, false)
   assert.match(short.payload.error, /2 个字/)
@@ -206,7 +206,7 @@ test('panel amend appends a requirement revision; gap session returns the regap 
     route,
     fakeRequest({
       method: 'POST',
-      url: '/plugin-smith/api/action',
+      url: '/plugin-keeper/api/action',
       body: { action: 'claim-session', id, kind: 'gap', sessionId: 'sess-gap-panel' },
     }),
   )

@@ -1,7 +1,7 @@
 /**
- * dsh-plugin-smith — Host entry.
+ * dsh-plugin-keeper — Host entry.
  *
- * A demand-driven forge for Harness plugins. The Host half owns:
+ * A demand-driven plugin keeper for Harness. The Host half owns:
  *   - the durable demand ledger (`lib/store.js`, schema in `lib/records.js`)
  *   - the static audit engine used for local packages (`lib/audit.js`)
  *   - registry evidence for not-yet-installed candidates (`lib/npm.js`)
@@ -19,7 +19,7 @@
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { registerPanel } from './lib/panel.js'
-import { createSmithService, createStore } from './lib/service.js'
+import { createKeeperService, createStore } from './lib/service.js'
 import { createScoutTool } from './lib/tools.js'
 import { errorMessage } from './lib/util.js'
 
@@ -27,9 +27,9 @@ import { errorMessage } from './lib/util.js'
 export const inject = ['tools']
 
 const PROMPT_SECTION = [
-  'Plugin Smith is active: the `plugin_scout` tool turns a plugin need into one durable, reviewable record',
+  'Plugin Keeper is active: the `plugin_scout` tool turns a plugin need into one durable, reviewable record',
   '(intake → candidates → audit → blood → decide → verify → install). The user sees the same record in the',
-  'sidebar panel 「插件锻造炉」. Use the tool for any plugin search, audit, gap-closing, or install request;',
+  'sidebar panel 「插件管家」. Use the tool for any plugin search, audit, gap-closing, or install request;',
   'write each stage back before moving on, and never install a candidate whose blood label is thin/cut.',
 ].join(' ')
 
@@ -41,11 +41,11 @@ export function apply(ctx, config) {
 
   const dataDir = resolveDataDir(config)
   const store = createStore({ dir: dataDir, log })
-  const service = createSmithService({ ctx, store, log })
+  const service = createKeeperService({ ctx, store, log })
 
   // Model-facing tool. Failure must not stop the panel from mounting.
   try {
-    ctx.effect(() => ctx.tools.register(createScoutTool(service)), 'dsh-plugin-smith: plugin_scout tool')
+    ctx.effect(() => ctx.tools.register(createScoutTool(service)), 'dsh-plugin-keeper: plugin_scout tool')
   } catch (error) {
     log.warn(`could not register plugin_scout: ${errorMessage(error)}`)
   }
@@ -56,12 +56,12 @@ export function apply(ctx, config) {
       ctx.effect(
         () =>
           ctx.systemPrompt.section({
-            name: 'dsh-plugin-smith',
+            name: 'dsh-plugin-keeper',
             order: 9100,
             interpolate: false,
             text: () => PROMPT_SECTION,
           }),
-        'dsh-plugin-smith: prompt section',
+        'dsh-plugin-keeper: prompt section',
       )
     }
   } catch (error) {
@@ -81,13 +81,13 @@ export function apply(ctx, config) {
 function resolveDataDir(config) {
   if (typeof config?.dataDir === 'string' && config.dataDir.trim().length > 0) return config.dataDir.trim()
   const home = process.env.DSH_HOME || join(homedir(), '.dsh')
-  return join(home, 'plugin-smith')
+  return join(home, 'plugin-keeper')
 }
 
 function write(ctx, level, message) {
   try {
     const logger = ctx.logger
-    if (typeof logger?.[level] === 'function') logger[level](`[dsh-plugin-smith] ${message}`)
+    if (typeof logger?.[level] === 'function') logger[level](`[dsh-plugin-keeper] ${message}`)
   } catch {
     /* logging must never break a turn */
   }

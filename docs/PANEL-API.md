@@ -1,4 +1,4 @@
-# Plugin Smith — frozen panel contract (V1)
+# Plugin Keeper — frozen panel contract (V1)
 
 This file is the contract between the Host half (`index.js`, `lib/*`) and the Client half
 (`client.js`). The Host half implements it; the Client half consumes it. Keys below are frozen
@@ -8,25 +8,25 @@ for V1: do not rename, and tolerate missing optional fields.
 
 | thing | value |
 |---|---|
-| package name / module id | `dsh-plugin-smith` |
-| panel id (sidebar + main key) | `dsh-plugin-smith` |
-| route prefix | `/plugin-smith` |
-| request header the client must send | `x-plugin-smith: 1` |
-| locale namespace (client) | `dshPluginSmith` |
+| package name / module id | `dsh-plugin-keeper` |
+| panel id (sidebar + main key) | `dsh-plugin-keeper` |
+| route prefix | `/plugin-keeper` |
+| request header the client must send | `x-plugin-keeper: 1` |
+| locale namespace (client) | `dshPluginKeeper` |
 | accent | amber `#e08a2e` / `#f7b955` |
 
 ## Endpoints
 
-All are same-origin loopback only. The client sends `x-plugin-smith: 1` on every request; the host
+All are same-origin loopback only. The client sends `x-plugin-keeper: 1` on every request; the host
 answers 403 without it. JSON in, JSON out.
 
-### `GET /plugin-smith/api/state`
+### `GET /plugin-keeper/api/state`
 
 ```json
 {
   "ok": true,
   "generatedAt": 1762300000000,
-  "dataDir": "C:\\Users\\x\\.dsh\\plugin-smith",
+  "dataDir": "C:\\Users\\<user>\\.dsh\\plugin-keeper",
   "stats": { "total": 3, "working": 1, "waiting": 1, "installed": 1, "blocked": 0, "archived": 0 },
   "records": [Summary],
   "history": [InstallHistoryEntry]
@@ -67,7 +67,7 @@ answers 403 without it. JSON in, JSON out.
 { recordId, title, at, spec, application, version, bundle, rollbackName }
 ```
 
-### `GET /plugin-smith/api/record?id=<recordId>`
+### `GET /plugin-keeper/api/record?id=<recordId>`
 
 ```json
 { "ok": true, "record": Record, "brief": "markdown brief for a new working session" }
@@ -199,7 +199,7 @@ answers 403 without it. JSON in, JSON out.
   rollback: { kind: 'remove-bundle', name: string }|null }
 ```
 
-### `POST /plugin-smith/api/action`
+### `POST /plugin-keeper/api/action`
 
 Body: `{ action, ...args }`. Always answers `{ "ok": true, ... }` or `{ "ok": false, "error": "..." }`.
 
@@ -226,9 +226,9 @@ until `approval.via === 'panel'` exists (the model receives `requiresUserConfirm
 
 ## Client UI requirements
 
-- Register `sidebar.panellist` entry `dsh-plugin-smith` (order 30, label from locale, amber anvil/hammer glyph)
-  and the `main` panel keyed `dsh-plugin-smith`.
-- One page, master–detail. Header: title 「插件锻造炉」/“Plugin Smith”, subtitle, four stat chips
+- Register `sidebar.panellist` entry `dsh-plugin-keeper` (order 30, label from locale, amber anvil/hammer glyph)
+  and the `main` panel keyed `dsh-plugin-keeper`.
+- One page, master–detail. Header: title 「插件管家」/“Plugin Keeper”, subtitle, four stat chips
   (总记录 / 进行中 / 待你拍板 / 已安装), refresh button, “每 3 秒自动刷新”.
 - Intake card at the top: textarea, depth segmented control (`快筛` / `标准` / `深挖`), submit button.
   Enter with Ctrl/Cmd submits; plain Enter inserts a newline.
@@ -257,12 +257,12 @@ until `approval.via === 'panel'` exists (the model receives `requiresUserConfirm
     Always show a hint when the brief lands as a draft.
   - `rollback` / `archive` / `reopen` / `reject` / `note` map straight to POST actions.
 - Language: all visible text through the client locale dictionaries (`zh`, `en`), no hard-coded strings.
-- Styling: only host theme tokens with neutral fallbacks; amber accent for the forge identity;
+- Styling: only host theme tokens with neutral fallbacks; amber accent for the keeper identity;
   monospace (`ui-monospace, SFMono-Regular, Menlo, monospace`) for ids/scores/times; status colors:
   blue = working, amber = needs you, green = installed, red = blocked/rejected, gray = archived.
-- States: loading, empty (with a short explanation of how the forge works),
+- States: loading, empty (with a short explanation of how the keeper works),
   error (show message + retry), and per-action pending/disabled states.
 - Accessibility: focus-visible rings, `aria-label` on icon-only controls, Esc closes detail,
   `prefers-reduced-motion` respected, no layout jump on refresh.
-- No JSX, no build step, no npm imports: `window.__ModuleLoader__.load({ id: 'dsh-plugin-smith', factory(require) { … } })`,
+- No JSX, no build step, no npm imports: `window.__ModuleLoader__.load({ id: 'dsh-plugin-keeper', factory(require) { … } })`,
   React via `require('react')`, `React.createElement`.

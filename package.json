@@ -1,16 +1,16 @@
 {
-  "name": "dsh-plugin-smith",
-  "version": "0.1.1",
-  "description": "Demand-driven plugin forge for DSH: scout candidates, audit them, judge full-blood vs cut-down builds, close the gaps, verify with tests, and install with a reviewable evidence trail.",
+  "name": "dsh-plugin-keeper",
+  "version": "0.2.0",
+  "description": "Demand-driven plugin keeper for DSH: scout candidates, audit them, judge full-blood vs cut-down builds, close the gaps, verify with tests, and install with a reviewable evidence trail.",
   "license": "MIT",
   "author": "YansongG-HKU",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/YansongG-HKU/dsh-plugin-smith.git"
+    "url": "git+https://github.com/YansongG-HKU/dsh-plugin-keeper.git"
   },
-  "homepage": "https://github.com/YansongG-HKU/dsh-plugin-smith#readme",
+  "homepage": "https://github.com/YansongG-HKU/dsh-plugin-keeper#readme",
   "bugs": {
-    "url": "https://github.com/YansongG-HKU/dsh-plugin-smith/issues"
+    "url": "https://github.com/YansongG-HKU/dsh-plugin-keeper/issues"
   },
   "keywords": [
     "dsh",

@@ -4,16 +4,16 @@ import { mkdtemp } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
-import { createSmithService, createStore } from '../lib/service.js'
+import { createKeeperService, createStore } from '../lib/service.js'
 
 async function makeService() {
-  const dir = await mkdtemp(join(tmpdir(), 'smith-service-'))
+  const dir = await mkdtemp(join(tmpdir(), 'keeper-service-'))
   const store = createStore({ dir })
   const ctx = {
     agents: { currentInitiator: () => undefined },
     workingDirectory: { get: () => dir },
   }
-  const service = createSmithService({ ctx, store })
+  const service = createKeeperService({ ctx, store })
   return { service, dir }
 }
 

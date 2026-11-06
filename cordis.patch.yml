@@ -1,10 +1,10 @@
-# dsh-plugin-smith bundle layer.
+# dsh-plugin-keeper bundle layer.
 #
 # A single Host plugin row. The Host half owns the demand ledger, the static
 # audit engine, the full-blood / cut-down analysis, the `plugin_scout` agent
 # tool, and the loopback panel route. The Client half (declared through
-# `dsh.client`) renders the forge panel in the sidebar rail and in the Plugins
+# `dsh.client`) renders the keeper panel in the sidebar rail and in the Plugins
 # page, and calls that same Host half — one operation, two callers.
 - insert:
-    - id: dsh-plugin-smith
-      name: dsh-plugin-smith
+    - id: dsh-plugin-keeper
+      name: dsh-plugin-keeper

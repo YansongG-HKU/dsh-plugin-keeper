@@ -1,8 +1,8 @@
-# Plugin Smith · dsh-plugin-smith
+# Plugin Keeper · dsh-plugin-keeper
 
 Turn one sentence of plugin need into one **reviewable installation record**: scout candidates → audit them → judge full-blood / thin / cut-down → close the gaps → test → let the user press install.
 
-It is not a plugin store. A store is for browsing; the Smith is procurement + inspection + completion + acceptance. You say what you need; it finds, inspects, completes, or forges; the only decision left to you is whether to press install.
+It is not a plugin store. A store is for browsing; the Keeper is procurement + inspection + completion + acceptance. You say what you need; it finds, inspects, completes, or builds; the only decision left to you is whether to press install.
 
 ```
 need ──▶ intake ──▶ scout ──▶ audit ──▶ blood/gaps ──▶ decide ──▶ execute ──▶ verify ──▶ install
@@ -18,14 +18,14 @@ need ──▶ intake ──▶ scout ──▶ audit ──▶ blood/gaps ─�
 - **Trial install** (sandbox evidence, automatic at depth=deep or with `sandbox:true`): the candidate is materialized in a throwaway directory by the profile's own pnpm with `--ignore-scripts`, its sha256 content digest is compared with the audited tarball, and the directory is deleted. The user's profile is never touched and no package script runs; the evidence level moves from `static` to `sandbox`.
 - **Judge**: every required capability becomes present / partial / missing, with gaps classified as **cut** (paid tier, removed feature), **incomplete**, **stale**, **integration**, or **ux**, and a 0–100 blood score.
 - **Complete**: a thin or cut-down package **may not be installed as-is**. The decision becomes `complete-then-install`: close the gap list, keep upstream attribution and license, re-verify, then enter install review.
-- **Forge**: when nothing usable exists, `build` a DSH bundle from scratch, through the same gate.
+- **Build**: when nothing usable exists, `build` a DSH bundle from scratch, through the same gate.
 - **Test**: L0 manifest/patch/JS syntax → L1 bundled tests → L2 real profile load confirmation → L3–L5 behavior / integrity / rollback evidence. Any failed level blocks installation.
 - **Install**: only the user can press it. The Host inspects the spec, re-runs L0 for local bundles, confirms L2 from the profile's own inventory, and writes install history plus a rollback handle.
 - **Record**: each need is one JSON record carrying candidates, findings (file/line/evidence), gaps, rationale, verification rows, install result, rollback, and the linked session.
 
 ## Two entry points, one record
 
-1. **Panel**: sidebar “Plugin Smith” → type the need → intake. Progress, decisions, verification and install all live here.
+1. **Panel**: sidebar “Plugin Keeper” → type the need → intake. Progress, decisions, verification and install all live here.
 2. **Session**: just ask “find me a plugin that can do X”. The model calls the `plugin_scout` tool, which creates the same record and runs the same pipeline; the panel reflects it live.
 
 Both call the same Host service. There is no second implementation.
@@ -36,7 +36,7 @@ Both call the same Host service. There is no second implementation.
 dsh plugin install <absolute path to this directory>
 ```
 
-or let the Harness `plugin_manager` install it with `install_bundle`. Data lives in `$DSH_HOME/plugin-smith/` (`records.json`, `history.json`), overridable with `apply(ctx, { dataDir })`.
+or let the Harness `plugin_manager` install it with `install_bundle`. Data lives in `$DSH_HOME/plugin-keeper/` (`records.json`, `history.json`), overridable with `apply(ctx, { dataDir })`.
 
 ## The panel
 

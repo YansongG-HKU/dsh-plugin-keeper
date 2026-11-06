@@ -1,38 +1,38 @@
 /**
- * dsh-plugin-smith — Client (browser) half.
+ * dsh-plugin-keeper — Client (browser) half.
  *
  * Hand-written browser plugin artifact: no build tooling, no npm imports, no JSX.
  * It only registers a lazy factory; nothing runs until the module is materialized.
  * Inside the factory it depends on the browser module table for React and
  * contributes two slots through the Host's `slots` service:
  *
- *   - `sidebar.panellist` (id `dsh-plugin-smith`, order 30): the forge glyph.
- *   - `main` (key `dsh-plugin-smith`): the forge panel, selected by the sidebar
+ *   - `sidebar.panellist` (id `dsh-plugin-keeper`, order 30): the keeper glyph.
+ *   - `main` (key `dsh-plugin-keeper`): the keeper panel, selected by the sidebar
  *     entry through the same id.
  *
- * Panel data comes from the co-located Host routes under `/plugin-smith/api/*`
- * (docs/PANEL-API.md). Every request carries the `x-plugin-smith: 1` header,
+ * Panel data comes from the co-located Host routes under `/plugin-keeper/api/*`
+ * (docs/PANEL-API.md). Every request carries the `x-plugin-keeper: 1` header,
  * which marks it as coming from this plugin's own page code.
  */
 window.__ModuleLoader__.load({
-  id: 'dsh-plugin-smith',
+  id: 'dsh-plugin-keeper',
   factory(require) {
     const React = require('react')
     const h = React.createElement
 
     /** Locale namespace owned by this Client half. */
-    const NS = 'dshPluginSmith'
+    const NS = 'dshPluginKeeper'
     /** Sidebar entry id; it also addresses the `main` panel key. */
-    const PANEL_ID = 'dsh-plugin-smith'
+    const PANEL_ID = 'dsh-plugin-keeper'
     /** Host routes registered by the Host half. */
-    const API_STATE = '/plugin-smith/api/state'
-    const API_RECORD = '/plugin-smith/api/record'
-    const API_ACTION = '/plugin-smith/api/action'
+    const API_STATE = '/plugin-keeper/api/state'
+    const API_RECORD = '/plugin-keeper/api/record'
+    const API_ACTION = '/plugin-keeper/api/action'
     /** Request header that gates the Host routes. */
-    const HEADER_NAME = 'x-plugin-smith'
+    const HEADER_NAME = 'x-plugin-keeper'
     /** Auto-refresh cadence for the panel while it is mounted and visible. */
     const REFRESH_MS = 3000
-    /** Accent pair for the forge identity (shared with the package icon). */
+    /** Accent pair for the keeper identity (shared with the package icon). */
     const ACCENT = '#e08a2e'
     const ACCENT_BRIGHT = '#f7b955'
 
@@ -42,9 +42,9 @@ window.__ModuleLoader__.load({
      */
     const DICTIONARIES = {
       zh: {
-        panel: '插件锻造炉',
-        pluginsTab: '锻造',
-        title: '插件锻造炉',
+        panel: '插件管家',
+        pluginsTab: '管家',
+        title: '插件管家',
         subtitle: '一句需求 → 侦察候选 → 审计与血量 → 补缺口 → 验收 → 安装台账',
         refresh: '刷新',
         refreshing: '刷新中…',
@@ -55,16 +55,16 @@ window.__ModuleLoader__.load({
         statWorking: '进行中',
         statWaiting: '待你拍板',
         statInstalled: '已安装',
-        intakeTitle: '锻造需求',
+        intakeTitle: '提个需求',
         intakePlaceholder: '想要一个什么样的插件？例如：按项目预算自动折叠旧上下文，并保留可恢复的原文。',
         intakeHint: 'Ctrl / ⌘ + Enter 提交 · Enter 换行',
         depthLabel: '侦察深度',
         depthQuick: '快筛',
         depthStandard: '标准',
         depthDeep: '深挖',
-        intakeSubmit: '开始锻造',
+        intakeSubmit: '交给管家',
         intakeSubmitting: '建档中…',
-        intakeCreated: '已建档，锻造炉开始侦察',
+        intakeCreated: '已建档，管家开始侦察',
         intakeEmpty: '先写一句需求',
         tabAll: '全部',
         tabWorking: '进行中',
@@ -77,7 +77,7 @@ window.__ModuleLoader__.load({
         errorLoad: '读取失败：{message}',
         retry: '重试',
         unknown: '—',
-        listEmptyTitle: '锻造炉还是冷的',
+        listEmptyTitle: '管家还没接到活',
         listEmptyHint: '在上面写下一条插件需求：候选、审计、血量和缺口都会留档，装完还会生成回滚凭据。',
         listEmptyFilteredTitle: '这个筛选下没有记录',
         listEmptyFilteredHint: '切回「全部」再看看。',
@@ -329,9 +329,9 @@ window.__ModuleLoader__.load({
         ledgerRollback: '回滚',
       },
       en: {
-        panel: 'Plugin Smith',
-        pluginsTab: 'Forge',
-        title: 'Plugin Smith',
+        panel: 'Plugin Keeper',
+        pluginsTab: 'Keeper',
+        title: 'Plugin Keeper',
         subtitle: 'One need → scout candidates → audit and blood score → close gaps → verify → install ledger',
         refresh: 'Refresh',
         refreshing: 'Refreshing…',
@@ -342,16 +342,16 @@ window.__ModuleLoader__.load({
         statWorking: 'In progress',
         statWaiting: 'Needs you',
         statInstalled: 'Installed',
-        intakeTitle: 'Forge a need',
+        intakeTitle: 'File a need',
         intakePlaceholder: 'What plugin do you want? For example: fold old context by project budget while keeping the original recoverable.',
         intakeHint: 'Ctrl / ⌘ + Enter to submit · Enter for a newline',
         depthLabel: 'Scout depth',
         depthQuick: 'Quick',
         depthStandard: 'Standard',
         depthDeep: 'Deep',
-        intakeSubmit: 'Start forging',
+        intakeSubmit: 'Hand it over',
         intakeSubmitting: 'Filing…',
-        intakeCreated: 'Filed — the forge is scouting now',
+        intakeCreated: 'Filed — the keeper is scouting now',
         intakeEmpty: 'Write a need first',
         tabAll: 'All',
         tabWorking: 'In progress',
@@ -364,7 +364,7 @@ window.__ModuleLoader__.load({
         errorLoad: 'Failed to load: {message}',
         retry: 'Retry',
         unknown: '—',
-        listEmptyTitle: 'The forge is still cold',
+        listEmptyTitle: 'The keeper has no jobs yet',
         listEmptyHint: 'Write a plugin need above: candidates, audit, blood, gaps, and the install rollback receipt all get filed here.',
         listEmptyFilteredTitle: 'Nothing under this filter',
         listEmptyFilteredHint: 'Switch back to All.',
@@ -620,7 +620,7 @@ window.__ModuleLoader__.load({
     /**
      * Component-local styles. Rendered as a React `<style>` element inside the
      * panel so unmounting removes them. Only host theme tokens (`--dsw-alias-*`)
-     * are used for surfaces and text, with neutral fallbacks; amber is the forge
+     * are used for surfaces and text, with neutral fallbacks; amber is the keeper
      * identity accent and status colors follow the frozen contract.
      */
     const STYLES = `
@@ -871,13 +871,13 @@ window.__ModuleLoader__.load({
     /** Anvil silhouette, filled with the current color. */
     const ANVIL_PATH =
       'M3.2 8.1h15.1l3.5 1.4-3.5 1.4h-3.4l-1.5 4.2h4.1v3.2H6.5v-3.2h4.1l-1.5-4.2H3.2v-2.8Z'
-    /** Four-point forge spark. */
+    /** Four-point spark. */
     const SPARK_PATH = 'M19.2 3.1l0.7 1.8 1.8 0.7-1.8 0.7-0.7 1.8-0.7-1.8-1.8-0.7 1.8-0.7Z'
     /** Back chevron for the detail view. */
     const BACK_PATH = 'M13.5 5.5 8 12l5.5 6.5'
 
     /** Sidebar glyph: an anvil in currentColor with an amber spark above it. */
-    function SmithIcon(props) {
+    function KeeperIcon(props) {
       const size = typeof props.size === 'number' && props.size > 0 ? props.size : 18
       const active = props.active === true
       return h(
@@ -1029,15 +1029,15 @@ window.__ModuleLoader__.load({
       return dateTimeText(at)
     }
 
-    function smithError(key, vars) {
+    function keeperError(key, vars) {
       const error = new Error(key)
-      error.smithKey = key
-      if (vars) error.smithVars = vars
+      error.keeperKey = key
+      if (vars) error.keeperVars = vars
       return error
     }
 
     function describeError(t, error) {
-      if (error && typeof error.smithKey === 'string') return t(error.smithKey, error.smithVars || {})
+      if (error && typeof error.keeperKey === 'string') return t(error.keeperKey, error.keeperVars || {})
       if (error instanceof Error && nonEmpty(error.message)) return error.message
       if (nonEmpty(error)) return error
       return t('errorUnknown')
@@ -1110,7 +1110,7 @@ window.__ModuleLoader__.load({
     function responseError(response, value) {
       const message = value && nonEmpty(value.error) ? value.error : null
       if (message) return new Error(message)
-      return smithError('errorHttp', { status: response.status })
+      return keeperError('errorHttp', { status: response.status })
     }
 
     async function apiGet(path, query) {
@@ -1126,11 +1126,11 @@ window.__ModuleLoader__.load({
       try {
         response = await fetch(`${path}${suffix}`, requestInit('GET'))
       } catch (error) {
-        throw smithError('errorNetwork')
+        throw keeperError('errorNetwork')
       }
       const value = await readJsonSafe(response)
       if (!response.ok) throw responseError(response, value)
-      if (value === null || typeof value !== 'object') throw smithError('errorUnexpected')
+      if (value === null || typeof value !== 'object') throw keeperError('errorUnexpected')
       if (value.ok === false) throw responseError(response, value)
       return value
     }
@@ -1140,11 +1140,11 @@ window.__ModuleLoader__.load({
       try {
         response = await fetch(API_ACTION, requestInit('POST', body))
       } catch (error) {
-        throw smithError('errorNetwork')
+        throw keeperError('errorNetwork')
       }
       const value = await readJsonSafe(response)
       if (!response.ok || (value && value.ok === false)) throw responseError(response, value)
-      if (value === null || typeof value !== 'object') throw smithError('errorUnexpected')
+      if (value === null || typeof value !== 'object') throw keeperError('errorUnexpected')
       return value
     }
 
@@ -1196,7 +1196,7 @@ window.__ModuleLoader__.load({
         const started = await workspace.startSession(undefined, { prompt: brief, whenDraftExists: 'append' })
         return { mode: 'draft', sessionId: readSessionId(started) }
       }
-      throw lastError || smithError('errorUnexpected')
+      throw lastError || keeperError('errorUnexpected')
     }
 
     async function claimAndLaunch(ctx, id, kind, briefFallback) {
@@ -1204,7 +1204,7 @@ window.__ModuleLoader__.load({
       let brief = ''
       if (result && nonEmpty(result.brief)) brief = result.brief
       else if (nonEmpty(briefFallback)) brief = briefFallback
-      if (!brief) throw smithError('sessionBriefMissing')
+      if (!brief) throw keeperError('sessionBriefMissing')
       return startSessionWithBrief(ctx, brief)
     }
 
@@ -1545,7 +1545,7 @@ window.__ModuleLoader__.load({
     /* Data hooks.                                                          */
     /* ------------------------------------------------------------------ */
 
-    function useSmithState() {
+    function useKeeperState() {
       const [snapshot, setSnapshot] = React.useState({
         data: null,
         error: null,
@@ -1602,7 +1602,7 @@ window.__ModuleLoader__.load({
       }
     }
 
-    function useSmithRecord(id, revision, syncKey) {
+    function useKeeperRecord(id, revision, syncKey) {
       const [state, setState] = React.useState({
         record: null,
         brief: '',
@@ -1710,7 +1710,7 @@ window.__ModuleLoader__.load({
       return h(
         'div',
         { className: 'ps-empty' },
-        props.showGlyph ? h('span', { className: 'ps-empty-glyph' }, h(SmithIcon, { size: 26 })) : null,
+        props.showGlyph ? h('span', { className: 'ps-empty-glyph' }, h(KeeperIcon, { size: 26 })) : null,
         h('p', { className: 'ps-empty-title' }, props.t(titleKey)),
         h('p', { className: 'ps-empty-hint' }, props.t(hintKey)),
       )
@@ -1726,7 +1726,7 @@ window.__ModuleLoader__.load({
           h(
             'div',
             { className: 'ps-head-title-row' },
-            h('span', { className: 'ps-head-glyph' }, h(SmithIcon, { size: 20 })),
+            h('span', { className: 'ps-head-glyph' }, h(KeeperIcon, { size: 20 })),
             h('h1', { className: 'ps-title' }, props.t('title')),
           ),
           h('p', { className: 'ps-subtitle' }, props.t('subtitle')),
@@ -2831,7 +2831,7 @@ window.__ModuleLoader__.load({
       const ctx = props.ctx
       const id = props.id
       const summary = props.summary || null
-      const state = useSmithRecord(id, props.revision, props.syncKey)
+      const state = useKeeperRecord(id, props.revision, props.syncKey)
       const record = state.record
       const onMutated = props.onMutated
       const onBack = props.onBack
@@ -2893,7 +2893,7 @@ window.__ModuleLoader__.load({
           let brief = ''
           if (result && nonEmpty(result.brief)) brief = result.brief
           else if (nonEmpty(state.brief)) brief = state.brief
-          if (!brief) throw smithError('sessionBriefMissing')
+          if (!brief) throw keeperError('sessionBriefMissing')
           try {
             const launched = await startSessionWithBrief(ctx, brief)
             if (launched.mode === 'draft') setActionNotice(t('sessionDraftHint'))
@@ -2904,7 +2904,7 @@ window.__ModuleLoader__.load({
           }
         } catch (error) {
           setActionError(
-            error && error.smithKey === 'sessionBriefMissing'
+            error && error.keeperKey === 'sessionBriefMissing'
               ? t('sessionBriefMissing')
               : t('actionFailed', { message: describeError(t, error) }),
           )
@@ -2922,7 +2922,7 @@ window.__ModuleLoader__.load({
 
       /** Append a requirement revision; the Host invalidates the old decision + gap analysis. */
       const amendIntent = async (text) => {
-        if (!nonEmpty(text)) throw smithError('amendEmpty')
+        if (!nonEmpty(text)) throw keeperError('amendEmpty')
         await apiPost({ action: 'amend', id, text })
         onMutated()
       }
@@ -3147,12 +3147,12 @@ window.__ModuleLoader__.load({
       }
     }
 
-    function SmithPanel(props) {
+    function KeeperPanel(props) {
       const sourceT = props.sourceT
       const ctx = props.ctx
       const t = React.useMemo(() => createTranslator(sourceT), [sourceT])
-      const smith = useSmithState()
-      const payload = smith.data && typeof smith.data === 'object' ? smith.data : null
+      const keeper = useKeeperState()
+      const payload = keeper.data && typeof keeper.data === 'object' ? keeper.data : null
       const rawRecords = payload && Array.isArray(payload.records) ? payload.records : []
       const records = React.useMemo(
         () =>
@@ -3177,7 +3177,7 @@ window.__ModuleLoader__.load({
       const pendingCardRef = React.useRef(null)
       const pageRef = React.useRef(null)
       const detailRef = React.useRef(null)
-      const load = smith.reload
+      const load = keeper.reload
 
       const refreshAll = React.useCallback(() => {
         void load(false)
@@ -3355,8 +3355,8 @@ window.__ModuleLoader__.load({
           { className: 'ps-shell' },
           h(PageHeader, {
             t,
-            updatedAt: smith.updatedAt,
-            busy: smith.busy,
+            updatedAt: keeper.updatedAt,
+            busy: keeper.busy,
             onRefresh: () => {
               void load(true)
             },
@@ -3364,16 +3364,16 @@ window.__ModuleLoader__.load({
           h('div', { className: 'ps-head-accent', 'aria-hidden': true }),
           detailOpen ? null : h(StatsRow, { t, counts }),
           detailOpen ? null : h(IntakeCard, { t, onCreated: handleCreated }),
-          smith.error
+          keeper.error
             ? h(ErrorBar, {
-                message: t('errorLoad', { message: describeError(t, smith.error) }),
+                message: t('errorLoad', { message: describeError(t, keeper.error) }),
                 retryLabel: t('retry'),
                 onRetry: () => {
                   void load(true)
                 },
               })
             : null,
-          !payload && smith.loading ? h('div', { className: 'ps-state' }, t('loading')) : detailOpen ? detail : listArea,
+          !payload && keeper.loading ? h('div', { className: 'ps-state' }, t('loading')) : detailOpen ? detail : listArea,
           !detailOpen && payload ? h(Ledger, { t, entries: ledgerEntries }) : null,
         ),
       )
@@ -3383,7 +3383,7 @@ window.__ModuleLoader__.load({
       /** Client services this plugin needs before it may activate. */
       inject: ['slots', 'locale'],
       apply(ctx) {
-        ctx.effect(() => ctx.locale.register(NS, DICTIONARIES), 'dsh-plugin-smith: dictionaries')
+        ctx.effect(() => ctx.locale.register(NS, DICTIONARIES), 'dsh-plugin-keeper: dictionaries')
         const t = createTranslator(ctx.locale.bind(NS))
 
         ctx.slots.inject('sidebar.panellist', () =>
@@ -3395,7 +3395,7 @@ window.__ModuleLoader__.load({
               label: () => t('panel'),
               locale: NS,
             },
-            SmithIcon,
+            KeeperIcon,
           ),
         )
 
@@ -3408,7 +3408,7 @@ window.__ModuleLoader__.load({
             },
             // `t` is bound once here (stable identity) so poll ticks never
             // re-render the memoized intake card.
-            () => h(SmithPanel, { sourceT: t, ctx }),
+            () => h(KeeperPanel, { sourceT: t, ctx }),
           ),
         )
 
@@ -3424,7 +3424,7 @@ window.__ModuleLoader__.load({
               locale: NS,
             },
             (slotProps) =>
-              h(SmithPanel, {
+              h(KeeperPanel, {
                 sourceT: slotProps && typeof slotProps.t === 'function' ? slotProps.t : t,
                 ctx,
               }),

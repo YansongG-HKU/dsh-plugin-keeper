@@ -11,7 +11,7 @@ import { promisify } from 'node:util'
 
 import { digestDirectory } from '../lib/digest.js'
 import { resolvePnpm, sandboxEvidence, trialInstall } from '../lib/sandbox.js'
-import { createSmithService, createStore } from '../lib/service.js'
+import { createKeeperService, createStore } from '../lib/service.js'
 
 const execFileAsync = promisify(execFile)
 const here = dirname(fileURLToPath(import.meta.url))
@@ -20,28 +20,28 @@ const fixtureDir = join(here, 'fixtures', 'bundle-good')
 /**
  * This workspace runs on a machine whose pnpm is the packaged desktop runtime,
  * not a PATH executable. Tests use the same override the plugin supports
- * (`DSH_SMITH_PNPM`); without a discoverable pnpm the pnpm-dependent tests skip
+ * (`DSH_KEEPER_PNPM`); without a discoverable pnpm the pnpm-dependent tests skip
  * instead of failing the suite.
  */
 const PNPM_CANDIDATES = [
-  process.env.SMITH_TEST_PNPM,
-  process.env.DSH_SMITH_PNPM,
+  process.env.KEEPER_TEST_PNPM,
+  process.env.DSH_KEEPER_PNPM,
   'E:/DeepSeek Harness/resources/runtime/primary-runtime/dependencies/pnpm/bin/pnpm.mjs',
 ].filter((value) => typeof value === 'string' && value.length > 0)
 const pnpmPath = PNPM_CANDIDATES.find((candidate) => existsSync(candidate)) ?? null
-if (pnpmPath) process.env.DSH_SMITH_PNPM = pnpmPath
-const noPnpm = pnpmPath ? false : 'no discoverable pnpm on this machine (set SMITH_TEST_PNPM)'
+if (pnpmPath) process.env.DSH_KEEPER_PNPM = pnpmPath
+const noPnpm = pnpmPath ? false : 'no discoverable pnpm on this machine (set KEEPER_TEST_PNPM)'
 
 test('resolvePnpm prefers the Host profileContext package manager', () => {
-  const previous = process.env.DSH_SMITH_PNPM
-  delete process.env.DSH_SMITH_PNPM
+  const previous = process.env.DSH_KEEPER_PNPM
+  delete process.env.DSH_KEEPER_PNPM
   try {
     const resolved = resolvePnpm({ profileContext: { packageManager: { command: 'node', args: ['/opt/pnpm.cjs'], env: { X: '1' } } } })
     assert.equal(resolved.command, 'node')
     assert.deepEqual(resolved.prefixArgs, ['/opt/pnpm.cjs'])
     assert.equal(resolved.env.X, '1')
   } finally {
-    if (previous !== undefined) process.env.DSH_SMITH_PNPM = previous
+    if (previous !== undefined) process.env.DSH_KEEPER_PNPM = previous
   }
 })
 
@@ -80,14 +80,14 @@ test('sandboxEvidence proves digest parity and always deletes the sandbox root',
 })
 
 test('trialInstall reports an unresolvable spec without throwing', { skip: noPnpm }, async () => {
-  const trial = await trialInstall('this-package-name-should-not-exist-smith-000@0.0.0', { timeoutMs: 60000 })
+  const trial = await trialInstall('this-package-name-should-not-exist-keeper-000@0.0.0', { timeoutMs: 60000 })
   assert.equal(trial.ok, false)
   assert.ok(typeof trial.error === 'string' && trial.error.length > 0)
 })
 
 async function localRegistry() {
-  const tarball = join(await mkdtemp(join(tmpdir(), 'smith-tar-')), 'pkg.tgz')
-  const stage = await mkdtemp(join(tmpdir(), 'smith-stage-'))
+  const tarball = join(await mkdtemp(join(tmpdir(), 'keeper-tar-')), 'pkg.tgz')
+  const stage = await mkdtemp(join(tmpdir(), 'keeper-stage-'))
   const pkgDir = join(stage, 'package')
   await mkdir(pkgDir, { recursive: true })
   const files = {
@@ -155,9 +155,9 @@ test('sandboxEvidence works against a tarball over HTTP', { skip: noPnpm }, asyn
 
 test('service.audit with sandbox:true upgrades the evidence level to sandbox', { skip: noPnpm }, async () => {
   const registry = await localRegistry()
-  const dataDir = await mkdtemp(join(tmpdir(), 'smith-sandbox-svc-'))
+  const dataDir = await mkdtemp(join(tmpdir(), 'keeper-sandbox-svc-'))
   try {
-    const service = createSmithService({
+    const service = createKeeperService({
       ctx: { agents: { currentInitiator: () => undefined }, workingDirectory: { get: () => dataDir } },
       store: createStore({ dir: dataDir }),
     })

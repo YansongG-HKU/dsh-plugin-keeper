@@ -1,8 +1,8 @@
-# 插件锻造炉 · dsh-plugin-smith
+# 插件管家 · dsh-plugin-keeper
 
-把一句插件需求，锻造成一条**可复核的安装记录**：侦察候选 → 验毒审计 → 判断满血/残血/阉割 → 补齐缺口 → 测试验收 → 由你确认安装。
+把一句插件需求，办成一条**可复核的安装记录**：侦察候选 → 验毒审计 → 判断满血/残血/阉割 → 补齐缺口 → 测试验收 → 由你确认安装。
 
-它不是插件市场。市场是「逛」，锻造炉是「采购 + 质检 + 定制 + 验收」：你只说你要什么，它去找、去验、去补、去造，最后只把「要不要按下安装」这一个决定交给你。
+它不是插件市场。市场是「逛」，插件管家是「采购 + 质检 + 定制 + 验收」：你只说你要什么，它去找、去验、去补、去造，最后只把「要不要按下安装」这一个决定交给你。
 
 > **兼容性（DSH 0.2.2-rc.1）**：Host 侧只使用 tools.register / systemPrompt.section / webServer.register 等稳定接口，0.2.2-rc.1 下无破坏性变化；104/104 测试通过。唯一已知软降级：`profileContext.dir` 在 0.2.2 不再公开，L4 安装目录摘要校验会回退为「未知目录」，不影响安装主流程（可用 `DSH_PROFILE_DIR` 显式指定）。
 
@@ -20,25 +20,25 @@
 - **隔离试装**（sandbox 证据，`depth=deep` 自动开启或 `sandbox:true`）：在临时目录里用 profile 自带 pnpm 以 `--ignore-scripts` 真正解析并落地候选包，证明落地产物的 sha256 摘要与审计对象完全一致，然后删除目录。不碰你的 profile、不执行包内任何脚本，证据等级从 `static` 升为 `sandbox`。
 - **判**：把候选拆成「能力 × 状态」清单，找出**阉割（cut）、残缺（incomplete）、过时（stale）、缺集成（integration）、体验（ux）**，给出 0–100 血量分。
 - **补**：残血/阉割**不允许直接装**。决策变成 `complete-then-install`：按缺口清单补齐、保留上游来源与 license、重新验收，再进入安装确认。
-- **造**：没有可用候选时 `build`，从零锻一个 DSH bundle，同样过门禁。
+- **造**：没有可用候选时 `build`，从零造一个 DSH bundle，同样过门禁。
 - **测**：L0 manifest/patch/JS 语法 → L1 自带测试 → L2 profile 实际加载确认 → L3–L5 行为/完整性/回滚证据。任一级失败即拦截，验收通过才算完成。
 - **装**：安装必须由你在面板点击。Host 会先 `inspect` spec、对本地 bundle 复跑 L0、安装后用 profile 自己的清单确认 L2，并写入安装历史与回滚点。
 - **留痕**：每条需求是一份 JSON 记录，含候选、审计发现（带文件/行号/证据片段）、缺口、决策理由、验收项、安装结果、回滚方式、关联会话。
 
 ## 两个入口，同一条记录
 
-1. **面板**：侧边栏「插件锻造炉」→ 输入需求 → 「立案」。之后所有推进、决策、验收、安装都在这里看。
+1. **面板**：侧边栏「插件管家」→ 输入需求 → 「立案」。之后所有推进、决策、验收、安装都在这里看。
 2. **会话**：直接在任意会话里说「给我找个能做 X 的插件」。模型会调用 `plugin_scout` 工具建同一条记录并跑同一条流水线；面板实时显示进度，也能接着让你确认。
 
 面板和工具调用同一个 Host 服务，没有第二套逻辑。
 
 ## 安装
 
-仓库：https://github.com/YansongG-HKU/dsh-plugin-smith
+仓库：https://github.com/YansongG-HKU/dsh-plugin-keeper
 
 ```bash
 # 从 GitHub 安装（推荐）
-dsh plugin --profile desktop add github:YansongG-HKU/dsh-plugin-smith
+dsh plugin --profile desktop add github:YansongG-HKU/dsh-plugin-keeper
 
 # 或本地开发目录
 dsh plugin install <本目录绝对路径>
@@ -46,7 +46,7 @@ dsh plugin install <本目录绝对路径>
 
 或让 Harness 的 `plugin_manager` 以 `install_bundle` 安装本目录。安装后重启/刷新 Web 页面即可在侧边栏看到。
 
-数据落在 `$DSH_HOME/plugin-smith/records.json`（默认 `~/.dsh/plugin-smith`），安装历史在同目录 `history.json`。可用 `apply(ctx, { dataDir })` 覆盖。
+数据落在 `$DSH_HOME/plugin-keeper/records.json`（默认 `~/.dsh/plugin-keeper`），安装历史在同目录 `history.json`。可用 `apply(ctx, { dataDir })` 覆盖。
 
 ## 面板做什么
 

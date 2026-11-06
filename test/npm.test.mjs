@@ -19,7 +19,7 @@ const execFileAsync = promisify(execFile)
 
 /** A realistic little package: manifest + one source file with a shell hook. */
 async function makePackageDir({ withInstallScript = true } = {}) {
-  const dir = await mkdtemp(join(tmpdir(), 'smith-pkg-'))
+  const dir = await mkdtemp(join(tmpdir(), 'keeper-pkg-'))
   const pkgDir = join(dir, 'package')
   await mkdir(pkgDir, { recursive: true })
   await writeFile(
@@ -150,9 +150,9 @@ test('registry evidence + source audit runs against a local registry', async () 
     // The metadata audit must already catch the install script.
     assert.ok(evidence.findings.some((finding) => finding.id === 'npm-install-script'))
 
-    const before = (await readdir(tmpdir())).filter((name) => name.startsWith('smith-src-')).length
+    const before = (await readdir(tmpdir())).filter((name) => name.startsWith('keeper-src-')).length
     const source = await auditRegistrySource(evidence.package, { maxFiles: 100 })
-    const after = (await readdir(tmpdir())).filter((name) => name.startsWith('smith-src-')).length
+    const after = (await readdir(tmpdir())).filter((name) => name.startsWith('keeper-src-')).length
 
     assert.equal(source.ok, true, source.error)
     assert.equal(source.audit.scope, 'source')

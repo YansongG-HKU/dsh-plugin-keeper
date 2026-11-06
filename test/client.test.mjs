@@ -1,5 +1,5 @@
 /**
- * dsh-plugin-smith — Client half smoke tests.
+ * dsh-plugin-keeper — Client half smoke tests.
  *
  * Loads `client.js` in a stub `window.__ModuleLoader__` capture, runs the lazy
  * factory with a tiny fake `react`, and calls `apply` with a fake plugin
@@ -126,7 +126,7 @@ function dictionaryCount(dictionary) {
 
 test('module spec is the frozen client identity', () => {
   const spec = loadModuleSpec()
-  assert.equal(spec.id, 'dsh-plugin-smith')
+  assert.equal(spec.id, 'dsh-plugin-keeper')
   assert.equal(typeof spec.factory, 'function')
 })
 
@@ -141,33 +141,33 @@ test('factory declares slots + locale and apply registers all three slots', () =
 
   const sidebar = findRegistration(state, 'sidebar.panellist')
   assert.ok(sidebar, 'sidebar.panellist must be registered')
-  assert.equal(sidebar.definition.id, 'dsh-plugin-smith')
+  assert.equal(sidebar.definition.id, 'dsh-plugin-keeper')
   assert.equal(sidebar.definition.order, 30)
-  assert.equal(sidebar.definition.locale, 'dshPluginSmith')
+  assert.equal(sidebar.definition.locale, 'dshPluginKeeper')
   assert.equal(typeof sidebar.definition.label, 'function')
-  assert.equal(sidebar.definition.label(), '插件锻造炉')
+  assert.equal(sidebar.definition.label(), '插件管家')
   assert.equal(typeof sidebar.component, 'function')
 
   const main = findRegistration(state, 'main')
   assert.ok(main, 'main must be registered')
-  assert.equal(main.definition.key, 'dsh-plugin-smith')
-  assert.equal(main.definition.locale, 'dshPluginSmith')
+  assert.equal(main.definition.key, 'dsh-plugin-keeper')
+  assert.equal(main.definition.locale, 'dshPluginKeeper')
   assert.equal(typeof main.component, 'function')
 
   const pluginsTab = findRegistration(state, 'plugins.tab')
   assert.ok(pluginsTab, 'plugins.tab must be registered')
-  assert.equal(pluginsTab.definition.id, 'dsh-plugin-smith-tab')
+  assert.equal(pluginsTab.definition.id, 'dsh-plugin-keeper-tab')
   assert.equal(pluginsTab.definition.order, 20)
-  assert.equal(pluginsTab.definition.locale, 'dshPluginSmith')
+  assert.equal(pluginsTab.definition.locale, 'dshPluginKeeper')
   assert.equal(typeof pluginsTab.definition.label, 'function')
-  assert.equal(pluginsTab.definition.label(), '锻造')
+  assert.equal(pluginsTab.definition.label(), '管家')
   assert.equal(typeof pluginsTab.component, 'function')
 
   // The tab content must tolerate a missing slotProps and a missing `t`.
   assert.doesNotThrow(() => pluginsTab.component(undefined))
   assert.doesNotThrow(() => pluginsTab.component({}))
-  assert.doesNotThrow(() => pluginsTab.component({ t: () => 'Forge' }))
-  const tabElement = pluginsTab.component({ t: () => 'Forge' })
+  assert.doesNotThrow(() => pluginsTab.component({ t: () => 'Keeper' }))
+  const tabElement = pluginsTab.component({ t: () => 'Keeper' })
   assert.ok(tabElement && typeof tabElement === 'object', 'the tab must render an element')
 })
 
@@ -195,7 +195,7 @@ test('locale dictionaries register for zh and en with identical key sets', () =>
   assert.equal(state.locales.length, 1)
 
   const entry = state.locales[0]
-  assert.equal(entry.namespace, 'dshPluginSmith')
+  assert.equal(entry.namespace, 'dshPluginKeeper')
   const zh = entry.dictionaries && entry.dictionaries.zh
   const en = entry.dictionaries && entry.dictionaries.en
   assert.ok(zh && typeof zh === 'object', 'zh dictionary must exist')
@@ -213,8 +213,8 @@ test('locale dictionaries register for zh and en with identical key sets', () =>
     assert.ok(en[key].length > 0, `en.${key} must not be empty`)
   }
 
-  assert.equal(zh.panel, '插件锻造炉')
-  assert.equal(en.panel, 'Plugin Smith')
+  assert.equal(zh.panel, '插件管家')
+  assert.equal(en.panel, 'Plugin Keeper')
   for (const key of ['title', 'intakeSubmit', 'statusAwaitingApproval', 'bloodCut', 'decisionCompleteThenInstall', 'sessionDraftHint', 'ledgerTitle']) {
     assert.ok(CJK_PATTERN.test(zh[key]), `zh.${key} should be Chinese: ${zh[key]}`)
   }
@@ -237,8 +237,8 @@ test('V1.1 keys exist in both dictionaries (audit scope + Plugins tab)', () => {
   assert.ok(CJK_PATTERN.test(zh.auditScopeHint))
   assert.equal(en.auditScopeHint, 'Published source could not be fetched; weaker evidence')
 
-  assert.equal(zh.pluginsTab, '锻造')
-  assert.equal(en.pluginsTab, 'Forge')
+  assert.equal(zh.pluginsTab, '管家')
+  assert.equal(en.pluginsTab, 'Keeper')
 
   for (const key of ['auditScope', 'auditScopeSource', 'auditScopeMetadata', 'auditScopeHint', 'pluginsTab']) {
     assert.ok(Object.prototype.hasOwnProperty.call(zh, key), `zh is missing ${key}`)
@@ -417,10 +417,10 @@ test('page text is confined to the dictionaries', () => {
 
 test('request plumbing and frozen API surface are wired', () => {
   for (const required of [
-    '/plugin-smith/api/state',
-    '/plugin-smith/api/record',
-    '/plugin-smith/api/action',
-    "HEADER_NAME = 'x-plugin-smith'",
+    '/plugin-keeper/api/state',
+    '/plugin-keeper/api/record',
+    '/plugin-keeper/api/action',
+    "HEADER_NAME = 'x-plugin-keeper'",
     'REFRESH_MS = 3000',
     "inject('sidebar.panellist'",
     "inject('main'",

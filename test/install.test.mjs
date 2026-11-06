@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { createSmithService, createStore } from '../lib/service.js'
+import { createKeeperService, createStore } from '../lib/service.js'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const bundleDir = join(here, 'fixtures', 'bundle-good')
@@ -66,9 +66,9 @@ function fakeManager({ profileDir }) {
 }
 
 async function setup() {
-  const profileDir = await mkdtemp(join(tmpdir(), 'smith-accept-profile-'))
+  const profileDir = await mkdtemp(join(tmpdir(), 'keeper-accept-profile-'))
   await mkdir(join(profileDir, 'node_modules'), { recursive: true })
-  const dataDir = await mkdtemp(join(tmpdir(), 'smith-accept-data-'))
+  const dataDir = await mkdtemp(join(tmpdir(), 'keeper-accept-data-'))
   const ctx = {
     agents: { currentInitiator: () => undefined },
     workingDirectory: { get: () => dataDir },
@@ -76,7 +76,7 @@ async function setup() {
       return undefined
     },
   }
-  const service = createSmithService({ ctx, store: createStore({ dir: dataDir }) })
+  const service = createKeeperService({ ctx, store: createStore({ dir: dataDir }) })
   return { profileDir, dataDir, ctx, service }
 }
 
