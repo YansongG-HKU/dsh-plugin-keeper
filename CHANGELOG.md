@@ -3,6 +3,12 @@
 All notable changes to `dsh-plugin-keeper` are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [0.2.1] — 2026-11-15
+
+### Changed
+
+- Align with DeepSeek Harness 0.2.2-rc.3: `engines.dsh` raised to `>=0.2.2-rc.3`; the Host API surface (tools.register / systemPrompt.section / webServer.register) is unchanged. 104/104 tests pass.
+
 ## [0.2.0] — 2026-11-07
 
 ### Changed

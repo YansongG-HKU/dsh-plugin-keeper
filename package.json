@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-keeper",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Demand-driven plugin keeper for DSH: scout candidates, audit them, judge full-blood vs cut-down builds, close the gaps, verify with tests, and install with a reviewable evidence trail.",
   "license": "MIT",
   "author": "YansongG-HKU",
@@ -63,6 +63,6 @@
   },
   "engines": {
     "node": ">=22",
-    "dsh": ">=0.2.2-rc.1"
+    "dsh": ">=0.2.2-rc.3"
   }
 }

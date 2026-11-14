@@ -4,7 +4,7 @@
 
 它不是插件市场。市场是「逛」，插件管家是「采购 + 质检 + 定制 + 验收」：你只说你要什么，它去找、去验、去补、去造，最后只把「要不要按下安装」这一个决定交给你。
 
-> **兼容性（DSH 0.2.2-rc.1）**：Host 侧只使用 tools.register / systemPrompt.section / webServer.register 等稳定接口，0.2.2-rc.1 下无破坏性变化；104/104 测试通过。唯一已知软降级：`profileContext.dir` 在 0.2.2 不再公开，L4 安装目录摘要校验会回退为「未知目录」，不影响安装主流程（可用 `DSH_PROFILE_DIR` 显式指定）。
+> **兼容性（DSH 0.2.2-rc.3，2026-11-15 实测）**：Host 侧只使用 tools.register / systemPrompt.section / webServer.register 等稳定接口，0.2.2-rc.3 下无破坏性变化；104/104 测试通过。唯一已知软降级：`profileContext.dir` 在 0.2.2 不再公开，L4 安装目录摘要校验会回退为「未知目录」，不影响安装主流程（可用 `DSH_PROFILE_DIR` 显式指定）。
 
 ```
 需求 ──▶ 立案 ──▶ 侦察 ──▶ 验毒 ──▶ 血量/缺口 ──▶ 决策 ──▶ 执行 ──▶ 验收 ──▶ 安装
